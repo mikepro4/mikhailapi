@@ -1,6 +1,6 @@
 const _ = require("lodash");
 const mongoose = require("mongoose");
-const Shape = mongoose.model("shape");
+const Shapes = mongoose.model("shape");
 const request = require('request-promise');
 
 module.exports = app => {
@@ -21,7 +21,7 @@ module.exports = app => {
 			.limit(limit);
 
 		return Promise.all(
-			[query, Shape.find(buildQuery(criteria)).countDocuments()]
+			[query, Shapes.find(buildQuery(criteria)).countDocuments()]
 		).then(
 			results => {
 				return res.json({
@@ -36,8 +36,8 @@ module.exports = app => {
 
 	// ===========================================================================
 
-	app.post("/shape/create", async (req, res) => {
-		const Shape = await new Shape({
+	app.post("/shapes/create", async (req, res) => {
+		const Shape = await new Shapes({
 			createdAt: new Date(),
 			metadata: req.body.metadata,
 		}).save();
@@ -47,7 +47,7 @@ module.exports = app => {
 	// ===========================================================================
 
 	app.post("/shape/update", async (req, res) => {
-		Shape.update(
+		Shapes.update(
 			{
 				_id: req.body.shapeId
 			},
@@ -57,7 +57,7 @@ module.exports = app => {
 			async (err, info) => {
 				if (err) res.status(400).send({ error: "true", error: err });
 				if (info) {
-					Shape.findOne({ _id: req.body.shapeId }, async (err, Shape) => {
+					Shapes.findOne({ _id: req.body.shapeId }, async (err, Shape) => {
 						if (Shape) {
 							res.json({ success: "true", info: info, Shape: Shape });
 						}
@@ -69,8 +69,8 @@ module.exports = app => {
 
 	// ===========================================================================
 
-	app.post("/shape/delete", async (req, res) => {
-		Shape.remove({ _id: req.body.shapeId }, async (err) => {
+	app.post("/shapes/delete", async (req, res) => {
+		Shapes.remove({ _id: req.body.shapeId }, async (err) => {
 			if (err) return res.send(err);
 			res.json({
 				success: "true",
@@ -81,8 +81,8 @@ module.exports = app => {
 
 	// ===========================================================================
 
-	app.post("/shape/details", async (req, res) => {
-		Shape.findOne({ _id: req.body.shapeId }, async (err, Shape) => {
+	app.post("/shapes/item", async (req, res) => {
+		Shapes.findOne({ _id: req.body.shapeId }, async (err, Shape) => {
 			if (Shape) {
 				res.json(Shape);
 			}
