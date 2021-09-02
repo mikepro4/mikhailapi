@@ -20,7 +20,13 @@ cloudinary.config({
 });
 
 module.exports = app => {
-	
+	app.get(
+        "/user_details",
+        requireAuth,
+		(req, res) => {
+            res.send(req.user)
+		}
+	);
 };
 
 const buildQuery = criteria => {
