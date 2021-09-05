@@ -98,11 +98,24 @@ module.exports = app => {
 
 	app.post("/shapes/main", async (req, res) => {
         console.log("main")
-        Shapes.find({ "metadata.main": true }, async (err, shapes) => {
-			if (shapes) {
-				res.json(shapes);
-			}
-		});
+        // Shapes.find({ "metadata.main": true }, async (err, shapes) => {
+		// 	if (shapes) {
+		// 		res.json(shapes);
+		// 	}
+        // });
+        
+        const query = Shapes.find({ "metadata.main": true })
+			.sort({ "metadata.mainDate": -1 })
+			.skip(0)
+            .limit(1);
+            
+            return Promise.all(
+                [query]
+            ).then(
+                results => {
+                    return res.json(results[0]);
+                }
+            );
 		// Shapes.findOne({ _id: req.body.shapeId }, async (err, Shape) => {
 		// 	if (Shape) {
 		// 		res.json(Shape);
