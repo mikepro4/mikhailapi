@@ -15,7 +15,7 @@ module.exports = app => {
 		} else {
 			adjustSortProperty = "metadata." + sortProperty
 		}
-		const query = Shape.find(buildQuery(criteria))
+		const query = Shapes.find(buildQuery(criteria))
 			.sort({ [adjustSortProperty]: order })
 			.skip(offset)
 			.limit(limit);
@@ -39,7 +39,8 @@ module.exports = app => {
 	app.post("/shapes/create", async (req, res) => {
 		const Shape = await new Shapes({
 			createdAt: new Date(),
-			metadata: req.body.metadata,
+            metadata: req.body.metadata,
+            defaultViz: req.body.defaultViz
 		}).save();
 		res.json(Shape);
 	});
@@ -52,7 +53,11 @@ module.exports = app => {
 				_id: req.body.shapeId
 			},
 			{
-				$set: { metadata: req.body.newShape }
+				$set: { 
+                    metadata: req.body.metadata,
+                    defaultViz: req.body.defaultViz,
+                    status: req.body.status 
+                }
 			},
 			async (err, info) => {
 				if (err) res.status(400).send({ error: "true", error: err });
