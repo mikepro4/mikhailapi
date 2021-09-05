@@ -11,9 +11,9 @@ module.exports = app => {
 		const { criteria, sortProperty, offset, limit, order } = req.body;
 		let adjustSortProperty 
 		if (sortProperty == "createdAt") {
-			adjustSortProperty = sortProperty
-		} else {
 			adjustSortProperty = "metadata." + sortProperty
+		} else {
+			adjustSortProperty =  sortProperty
 		}
 		const query = Shapes.find(buildQuery(criteria))
 			.sort({ [adjustSortProperty]: order })
