@@ -92,6 +92,22 @@ module.exports = app => {
 				res.json(Shape);
 			}
 		});
+    });
+
+    // ===========================================================================
+
+	app.post("/shapes/main", async (req, res) => {
+        console.log("main")
+        Shapes.find({ "metadata.main": true }, async (err, shapes) => {
+			if (shapes) {
+				res.json(shapes);
+			}
+		});
+		// Shapes.findOne({ _id: req.body.shapeId }, async (err, Shape) => {
+		// 	if (Shape) {
+		// 		res.json(Shape);
+		// 	}
+		// });
 	});
 
 };
