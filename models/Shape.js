@@ -15,8 +15,21 @@ const shapeSchema = new Schema({
     point: {
         pointSize: { type: Number, default: 1.3},
         pointOpacity: { type: Number, default: 1},
-        pointCount: { type: Number, default: 2048},
+        pointCount: { type: Number, default: 1024},
     },
+    overlay: {
+        visible: { type: Boolean, default: false},
+        blur: { type: Number, default: 222},
+        color: { type: String, default: "#000000"},
+        colorOpacity: { type: Number, default: 0.6}
+    },
+    colors: [
+        {
+            hex: { type: String, default: "#ffffff"},
+            amount: { type: Number, default: 22.2},
+            opacity: { type: Number, default: 100}
+        }
+    ]
   },
   metadata: {
         title: String,
