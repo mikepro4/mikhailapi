@@ -11,6 +11,7 @@ const shapeSchema = new Schema({
         frequency: { type: Number, default: 0.0001},
         boldRate: { type: Number, default: 1},
         math: { type: String, default: "sin"},
+        backgroundColor: { type: String, default: "#000000"}
     },
     point: {
         pointSize: { type: Number, default: 1.3},
@@ -27,7 +28,8 @@ const shapeSchema = new Schema({
         {
             hex: { type: String, default: "#ffffff"},
             amount: { type: Number, default: 22.2},
-            opacity: { type: Number, default: 100}
+            opacity: { type: Number, default: 100},
+            _id: String
         }
     ]
   },
