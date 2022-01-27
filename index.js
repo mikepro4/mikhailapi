@@ -53,9 +53,11 @@ app.post('/signin', requireSignin, Authentication.signin);
 app.post('/signup', Authentication.signup);
 
 require("./models/Shape");
+require("./models/Word");
 
 require("./routes/main")(app);
 require("./routes/shapeRoutes")(app);
+require("./routes/wordRoutes")(app);
 
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT);
