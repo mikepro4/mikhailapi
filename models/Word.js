@@ -8,6 +8,7 @@ const wordSchema = new Schema({
             url: String,
             main: { type: Boolean, default: false},
             mainDate: { type: Date, default: Date.now },
+            palette: Object
         }
     ],
     metadata: {
