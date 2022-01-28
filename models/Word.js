@@ -17,7 +17,9 @@ const wordSchema = new Schema({
         createdAt: { type: Date, default: Date.now },
         main: { type: Boolean, default: false},
         shapeId: String,
-        audioUrl: String
+        audioUrl: String,
+        sortBy: { type: String, default: "position"},
+        sortByDirection: { type: String, default: "asc"}
     },
 });
 

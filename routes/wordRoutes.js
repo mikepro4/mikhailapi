@@ -40,7 +40,8 @@ module.exports = app => {
 		const Word = await new Words({
 			createdAt: new Date(),
             metadata: req.body.metadata,
-            defaultViz: req.body.defaultViz
+            defaultViz: req.body.defaultViz,
+            blocks: req.body.blocks
 		}).save();
 		res.json(Word);
 	});
@@ -48,7 +49,7 @@ module.exports = app => {
 	// ===========================================================================
 
 	app.post("/word/update", async (req, res) => {
-        console.log(req.body.blocks)
+        console.log(req.body.metadata)
 		Words.updateOne(
 			{
 				_id: req.body.wordId
@@ -72,7 +73,6 @@ module.exports = app => {
 	});
 
     app.post("/word/updateBlocks", async (req, res) => {
-        console.log(req.body.blocks)
 		Words.updateOne(
 			{
 				_id: req.body.wordId
