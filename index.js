@@ -54,10 +54,12 @@ app.post('/signup', Authentication.signup);
 
 require("./models/Shape");
 require("./models/Word");
+require("./models/NFT");
 
 require("./routes/main")(app);
 require("./routes/shapeRoutes")(app);
 require("./routes/wordRoutes")(app);
+require("./routes/nftRoutes")(app);
 
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT);
