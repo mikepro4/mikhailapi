@@ -13,7 +13,7 @@ module.exports = app => {
 		if (sortProperty == "createdAt") {
 			adjustSortProperty = "metadata." + sortProperty
 		} else {
-			adjustSortProperty =  sortProperty
+			adjustSortProperty = "metadata." + sortProperty
 		}
 		const query = NFTs.find(buildQuery(criteria))
 			.sort({ [adjustSortProperty]: order })
@@ -117,6 +117,30 @@ module.exports = app => {
 		);
 	});
 
+    app.post("/NFT/updateDuration", async (req, res) => {
+		NFTs.updateOne(
+			{
+				_id: req.body.nftId
+			},
+			{
+				$set: { 
+                    "metadata.duration": req.body.duration,
+                }
+			},
+			async (err, info) => {
+				if (err) res.status(400).send({ error: "true", error: err });
+				if (info) {
+					NFTs.findOne({ _id: req.body.nftId }, async (err, NFT) => {
+						if (NFT) {
+							res.json({ success: "true", info: info, nft: NFT });
+						}
+					});
+				}
+			}
+		);
+	});
+
+
     app.post("/NFT/updateBlocks", async (req, res) => {
 		NFTs.updateOne(
 			{
@@ -190,6 +214,38 @@ const buildQuery = criteria => {
 			"metadata.createdBy": {
 				$regex: new RegExp(criteria.createdBy),
 				$options: "i"
+			}
+		});
+	}
+
+    if (criteria.featured) {
+		_.assign(query, {
+			"metadata.featured": {
+				$eq: true
+			},
+            "metadata.minted": {
+				$eq: true
+			}
+		});
+	}
+    if (criteria.sale) {
+		_.assign(query, {
+			"metadata.minted": {
+				$eq: true
+			}
+		});
+
+        _.assign(query, {
+            "metadata.owner": {
+				$eq: ""
+			}
+		});
+	}
+
+    if (criteria.owner) {
+		_.assign(query, {
+			"metadata.owner": {
+				$eq: criteria.owner
 			}
 		});
 	}
