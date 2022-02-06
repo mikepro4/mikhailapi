@@ -16,7 +16,8 @@ const NFTSchema = new Schema({
         duration: Number,
         createdAt: { type: Date, default: Date.now },
         featured: { type: Boolean, default: false },
-        featuredOrder: { type: Number, default: 0}
+        featuredOrder: { type: Number, default: 0},
+        tokenId: String
     },
 });
 

@@ -185,6 +185,16 @@ module.exports = app => {
 			}
 		});
     });
+    
+    // ===========================================================================
+
+	app.post("/NFTs/itemByTokenId", async (req, res) => {
+		NFTs.findOne({ "metadata.tokenId": req.body.tokenId }, async (err, NFT) => {
+			if (NFT) {
+				res.json(NFT);
+			}
+		});
+    });
 
     // ===========================================================================
 
