@@ -48,22 +48,68 @@ module.exports = app => {
 	// ===========================================================================
 
 	app.post("/NFT/update", async (req, res) => {
-        console.log(req.body.metadata)
 		NFTs.updateOne(
 			{
-				_id: req.body.NFTId
+				_id: req.body.nftId
 			},
 			{
 				$set: { 
                     metadata: req.body.metadata,
+                    nft: req.body.nft,
                 }
 			},
 			async (err, info) => {
 				if (err) res.status(400).send({ error: "true", error: err });
 				if (info) {
-					NFTs.findOne({ _id: req.body.NFTId }, async (err, NFT) => {
+					NFTs.findOne({ _id: req.body.nftId }, async (err, NFT) => {
 						if (NFT) {
-							res.json({ success: "true", info: info, NFT: NFT });
+							res.json({ success: "true", info: info, nft: NFT });
+						}
+					});
+				}
+			}
+		);
+	});
+
+    app.post("/NFT/updateShape", async (req, res) => {
+		NFTs.updateOne(
+			{
+				_id: req.body.nftId
+			},
+			{
+				$set: { 
+                    "metadata.shapeId": req.body.shapeId,
+                }
+			},
+			async (err, info) => {
+				if (err) res.status(400).send({ error: "true", error: err });
+				if (info) {
+					NFTs.findOne({ _id: req.body.nftId }, async (err, NFT) => {
+						if (NFT) {
+							res.json({ success: "true", info: info, nft: NFT });
+						}
+					});
+				}
+			}
+		);
+	});
+
+    app.post("/NFT/updateImage", async (req, res) => {
+		NFTs.updateOne(
+			{
+				_id: req.body.nftId
+			},
+			{
+				$set: { 
+                    "nft.fileUrl": req.body.fileUrl,
+                }
+			},
+			async (err, info) => {
+				if (err) res.status(400).send({ error: "true", error: err });
+				if (info) {
+					NFTs.findOne({ _id: req.body.nftId }, async (err, NFT) => {
+						if (NFT) {
+							res.json({ success: "true", info: info, nft: NFT });
 						}
 					});
 				}

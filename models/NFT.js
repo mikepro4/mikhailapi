@@ -10,7 +10,8 @@ const NFTSchema = new Schema({
     },
     metadata: {
         shapeId: String,
-        owner: String
+        owner: String,
+        minted: { type: Boolean, default: false }
     },
 });
 
