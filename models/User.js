@@ -14,7 +14,8 @@ const userSchema = new Schema({
   coverGradient: { type: Number, default: 1 },
   username: String,
   bio: String,
-  url: String
+  url: String,
+  admin: { type: Boolean, default: false}
 });
 
 // On Save Hook, encrypt password

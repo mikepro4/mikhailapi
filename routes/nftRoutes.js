@@ -2,26 +2,31 @@ const _ = require("lodash");
 const mongoose = require("mongoose");
 const NFTs = mongoose.model("NFT");
 const request = require('request-promise');
+const passport = require('passport');
+const requireLogin = require("../middleware/requireLogin");
+
+const requireAuth = passport.authenticate('jwt', { session: false });
 
 module.exports = app => {
 
 	// ===========================================================================
 
 	app.post("/NFTs/search", async (req, res) => {
-		const { criteria, sortProperty, offset, limit, order } = req.body;
+        console.log(req.body.user)
+		const { criteria, sortProperty, offset, limit, order, user } = req.body;
 		let adjustSortProperty 
 		if (sortProperty == "createdAt") {
 			adjustSortProperty = "metadata." + sortProperty
 		} else {
 			adjustSortProperty = "metadata." + sortProperty
 		}
-		const query = NFTs.find(buildQuery(criteria))
+		const query = NFTs.find(buildQuery(criteria, user))
 			.sort({ [adjustSortProperty]: order })
 			.skip(offset)
 			.limit(limit);
 
 		return Promise.all(
-			[query, NFTs.find(buildQuery(criteria)).countDocuments()]
+			[query, NFTs.find(buildQuery(criteria, user)).countDocuments()]
 		).then(
 			results => {
 				return res.json({
@@ -47,74 +52,87 @@ module.exports = app => {
 
 	// ===========================================================================
 
-	app.post("/NFT/update", async (req, res) => {
-		NFTs.updateOne(
-			{
-				_id: req.body.nftId
-			},
-			{
-				$set: { 
-                    metadata: req.body.metadata,
-                    nft: req.body.nft,
+	app.post("/NFT/update", requireAuth, async (req, res) => {
+        if(req.user.admin == true) {
+            NFTs.updateOne(
+                {
+                    _id: req.body.nftId
+                },
+                {
+                    $set: { 
+                        metadata: req.body.metadata,
+                        nft: req.body.nft,
+                    }
+                },
+                async (err, info) => {
+                    if (err) res.status(400).send({ error: "true", error: err });
+                    if (info) {
+                        NFTs.findOne({ _id: req.body.nftId }, async (err, NFT) => {
+                            if (NFT) {
+                                res.json({ success: "true", info: info, nft: NFT });
+                            }
+                        });
+                    }
                 }
-			},
-			async (err, info) => {
-				if (err) res.status(400).send({ error: "true", error: err });
-				if (info) {
-					NFTs.findOne({ _id: req.body.nftId }, async (err, NFT) => {
-						if (NFT) {
-							res.json({ success: "true", info: info, nft: NFT });
-						}
-					});
-				}
-			}
-		);
+            );
+        } else {
+            return res.status(401).send({ error: "true", error: err })
+        }
+		
 	});
 
-    app.post("/NFT/updateShape", async (req, res) => {
-		NFTs.updateOne(
-			{
-				_id: req.body.nftId
-			},
-			{
-				$set: { 
-                    "metadata.shapeId": req.body.shapeId,
+    app.post("/NFT/updateShape", requireAuth, async (req, res) => {
+        if(req.user.admin == true) {
+            NFTs.updateOne(
+                {
+                    _id: req.body.nftId
+                },
+                {
+                    $set: { 
+                        "metadata.shapeId": req.body.shapeId,
+                    }
+                },
+                async (err, info) => {
+                    if (err) res.status(400).send({ error: "true", error: err });
+                    if (info) {
+                        NFTs.findOne({ _id: req.body.nftId }, async (err, NFT) => {
+                            if (NFT) {
+                                res.json({ success: "true", info: info, nft: NFT });
+                            }
+                        });
+                    }
                 }
-			},
-			async (err, info) => {
-				if (err) res.status(400).send({ error: "true", error: err });
-				if (info) {
-					NFTs.findOne({ _id: req.body.nftId }, async (err, NFT) => {
-						if (NFT) {
-							res.json({ success: "true", info: info, nft: NFT });
-						}
-					});
-				}
-			}
-		);
+            );
+        } else {
+            return res.status(401).send({ error: "true", error: err })
+        }
 	});
 
-    app.post("/NFT/updateImage", async (req, res) => {
-		NFTs.updateOne(
-			{
-				_id: req.body.nftId
-			},
-			{
-				$set: { 
-                    "nft.fileUrl": req.body.fileUrl,
+    app.post("/NFT/updateImage", requireAuth, async (req, res) => {
+        if(req.user.admin == true) {
+            NFTs.updateOne(
+                {
+                    _id: req.body.nftId
+                },
+                {
+                    $set: { 
+                        "nft.fileUrl": req.body.fileUrl,
+                    }
+                },
+                async (err, info) => {
+                    if (err) res.status(400).send({ error: "true", error: err });
+                    if (info) {
+                        NFTs.findOne({ _id: req.body.nftId }, async (err, NFT) => {
+                            if (NFT) {
+                                res.json({ success: "true", info: info, nft: NFT });
+                            }
+                        });
+                    }
                 }
-			},
-			async (err, info) => {
-				if (err) res.status(400).send({ error: "true", error: err });
-				if (info) {
-					NFTs.findOne({ _id: req.body.nftId }, async (err, NFT) => {
-						if (NFT) {
-							res.json({ success: "true", info: info, nft: NFT });
-						}
-					});
-				}
-			}
-		);
+            );
+        } else {
+            return res.status(401).send({ error: "true", error: err })
+        }
 	});
 
     app.post("/NFT/updateDuration", async (req, res) => {
@@ -166,19 +184,24 @@ module.exports = app => {
 
 	// ===========================================================================
 
-	app.post("/NFTs/delete", async (req, res) => {
-		NFTs.remove({ _id: req.body.NFTId }, async (err) => {
-			if (err) return res.send(err);
-			res.json({
-				success: "true",
-				message: "deleted NFT"
-			});
-		});
+	app.post("/NFTs/delete", requireAuth, async (req, res) => {
+        if(req.user.admin == true) {
+            NFTs.remove({ _id: req.body.NFTId }, async (err) => {
+                if (err) return res.send(err);
+                res.json({
+                    success: "true",
+                    message: "deleted NFT"
+                });
+            });
+        } else {
+            return res.status(401).send({ error: "true", error: err })
+        }
 	});
 
 	// ===========================================================================
+    
 
-	app.post("/NFTs/item", async (req, res) => {
+	app.post("/NFTs/item",  async (req, res) => {
 		NFTs.findOne({ _id: req.body.NFTId }, async (err, NFT) => {
 			if (NFT) {
 				res.json(NFT);
@@ -216,7 +239,7 @@ module.exports = app => {
 
 };
 
-const buildQuery = criteria => {
+const buildQuery = (criteria, user) => {
 	const query = {};
 
 	if (criteria.createdBy) {
@@ -259,6 +282,14 @@ const buildQuery = criteria => {
 			}
 		});
 	}
+
+    if(!user) {
+        _.assign(query, {
+			"metadata.minted": {
+				$eq: true
+			}
+		});
+    }
 
 	return query
 };
