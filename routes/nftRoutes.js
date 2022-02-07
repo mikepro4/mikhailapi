@@ -52,8 +52,8 @@ module.exports = app => {
 
 	// ===========================================================================
 
-	app.post("/NFT/update", requireAuth, async (req, res) => {
-        if(req.user.admin == true) {
+	app.post("/NFT/update", async (req, res) => {
+        // if(req.user.admin == true) {
             NFTs.updateOne(
                 {
                     _id: req.body.nftId
@@ -75,9 +75,9 @@ module.exports = app => {
                     }
                 }
             );
-        } else {
-            return res.status(401).send({ error: "true", error: err })
-        }
+        // } else {
+        //     return res.status(401).send({ error: "true", error: err })
+        // }
 		
 	});
 
