@@ -72,6 +72,31 @@ module.exports = app => {
 		);
 	});
 
+    // ===========================================================================
+
+	app.post("/shape/updateHidden", async (req, res) => {
+		Shapes.updateOne(
+			{
+				_id: req.body.shapeId
+			},
+			{
+				$set: { 
+                    "metadata.hidden": true
+                }
+			},
+			async (err, info) => {
+				if (err) res.status(400).send({ error: "true", error: err });
+				if (info) {
+					Shapes.findOne({ _id: req.body.shapeId }, async (err, Shape) => {
+						if (Shape) {
+							res.json({ success: "true", info: info, Shape: Shape });
+						}
+					});
+				}
+			}
+		);
+	});
+
 	// ===========================================================================
 
 	app.post("/shapes/delete", async (req, res) => {

@@ -39,7 +39,7 @@ const shapeSchema = new Schema({
         createdAt: { type: Date, default: Date.now },
         main: { type: Boolean, default: false},
         mainDate: { type: Date, default: Date.now },
-
+        hidden: { type: Boolean, default: false}
   },
   status: { type: String, default: "draft" },
   likes: { type: Number, default: 0 },

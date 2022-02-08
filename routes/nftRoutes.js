@@ -81,6 +81,36 @@ module.exports = app => {
 		
 	});
 
+    app.post("/NFTs/reset", requireAuth, async (req, res) => {
+        if(req.user.admin == true) {
+
+            NFTs.updateMany(
+                {
+                },
+                {
+                    $set: {
+                        "metadata.minted": false,
+                        "metadata.owner": "",
+                        "metadata.tokenId": null
+                    }
+                },
+                async (err, info) => {
+                    if (err) res.status(400).send({ error: "true", error: err });
+                    if (info) {
+                        NFTs.findOne({ _id: req.body.nftId }, async (err, NFT) => {
+                            if (NFT) {
+                                res.json({ success: "true", info: info, nft: NFT });
+                            }
+                        });
+                    }
+                }
+            );
+
+        } else {
+            return res.status(401).send({ error: "true", error: err })
+        }
+	});
+
     app.post("/NFT/updateShape", requireAuth, async (req, res) => {
         if(req.user.admin == true) {
             NFTs.updateOne(
@@ -279,6 +309,14 @@ const buildQuery = (criteria, user) => {
 		_.assign(query, {
 			"metadata.owner": {
 				$eq: criteria.owner
+			}
+		});
+	}
+
+    if (criteria.notMinted) {
+		_.assign(query, {
+			"metadata.minted": {
+				$eq: false
 			}
 		});
 	}
