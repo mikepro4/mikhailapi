@@ -47,6 +47,9 @@ module.exports = app => {
             {
                 "metadata.approved": {
                     $eq: true
+                },
+                "metadata.minted": {
+                    $eq: false
                 }
             }).countDocuments()
 

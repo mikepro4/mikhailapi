@@ -383,7 +383,10 @@ const buildQuery = (criteria, user) => {
 			},
             "metadata.rejected": {
 				$exists: false
-			}
+			},
+            "metadata.minted": {
+                $eq: false
+            }
 		});
 	}
 
@@ -391,7 +394,10 @@ const buildQuery = (criteria, user) => {
 		_.assign(query, {
 			"metadata.approved": {
 				$eq: true
-			}
+			},
+            "metadata.minted": {
+                $eq: false
+            }
 		});
 	}
 
@@ -399,7 +405,10 @@ const buildQuery = (criteria, user) => {
 		_.assign(query, {
 			"metadata.rejected": {
 				$eq: true
-			}
+			},
+            "metadata.minted": {
+                $eq: false
+            }
 		});
 	}
 
