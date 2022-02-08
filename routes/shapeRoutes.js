@@ -162,5 +162,13 @@ const buildQuery = criteria => {
 		});
 	}
 
+    if (criteria.notHidden) {
+		_.assign(query, {
+			"metadata.hidden": {
+				$exists: false
+			}
+		});
+	}
+
 	return query
 };
