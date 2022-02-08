@@ -282,14 +282,22 @@ const buildQuery = (criteria, user) => {
 	}
 
     if (criteria.featured) {
-		_.assign(query, {
-			"metadata.featured": {
-				$eq: true
-			},
-            "metadata.minted": {
-				$eq: true
-			}
-		});
+        if(!user) {
+            _.assign(query, {
+                "metadata.featured": {
+                    $eq: true
+                },
+                "metadata.minted": {
+                    $eq: true
+                }
+            });
+        } else {
+            _.assign(query, {
+                "metadata.featured": {
+                    $eq: true
+                }
+            });
+        }
 	}
     if (criteria.sale) {
 		_.assign(query, {
