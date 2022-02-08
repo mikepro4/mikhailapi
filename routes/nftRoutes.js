@@ -188,6 +188,53 @@ module.exports = app => {
 		);
 	});
 
+    app.post("/NFT/updateApproved", async (req, res) => {
+		NFTs.updateOne(
+			{
+				_id: req.body.nftId
+			},
+			{
+				$set: { 
+                    "metadata.approved": true,
+                }
+			},
+			async (err, info) => {
+				if (err) res.status(400).send({ error: "true", error: err });
+				if (info) {
+					NFTs.findOne({ _id: req.body.nftId }, async (err, NFT) => {
+						if (NFT) {
+							res.json({ success: "true", info: info, nft: NFT });
+						}
+					});
+				}
+			}
+		);
+	});
+
+    app.post("/NFT/updateRejected", async (req, res) => {
+		NFTs.updateOne(
+			{
+				_id: req.body.nftId
+			},
+			{
+				$set: { 
+                    "metadata.rejected": true,
+                }
+			},
+			async (err, info) => {
+				if (err) res.status(400).send({ error: "true", error: err });
+				if (info) {
+					NFTs.findOne({ _id: req.body.nftId }, async (err, NFT) => {
+						if (NFT) {
+							res.json({ success: "true", info: info, nft: NFT });
+						}
+					});
+				}
+			}
+		);
+	});
+
+
 
     app.post("/NFT/updateBlocks", async (req, res) => {
 		NFTs.updateOne(
@@ -325,6 +372,41 @@ const buildQuery = (criteria, user) => {
 		_.assign(query, {
 			"metadata.minted": {
 				$eq: false
+			}
+		});
+	}
+
+    if (criteria.unreviewed) {
+		_.assign(query, {
+			"metadata.approved": {
+				$exists: false
+			},
+            "metadata.rejected": {
+				$exists: false
+			}
+		});
+	}
+
+    if (criteria.approved) {
+		_.assign(query, {
+			"metadata.approved": {
+				$eq: true
+			}
+		});
+	}
+
+    if (criteria.rejected) {
+		_.assign(query, {
+			"metadata.rejected": {
+				$eq: true
+			}
+		});
+	}
+
+    if (criteria.sold) {
+		_.assign(query, {
+			"metadata.owner": {
+				$ne: ""
 			}
 		});
 	}
