@@ -234,6 +234,29 @@ module.exports = app => {
 		);
 	});
 
+    app.post("/NFT/updateOwner", async (req, res) => {
+		NFTs.updateOne(
+			{
+				_id: req.body.nftId
+			},
+			{
+				$set: { 
+                    "metadata.owner": req.body.owner,
+                }
+			},
+			async (err, info) => {
+				if (err) res.status(400).send({ error: "true", error: err });
+				if (info) {
+					NFTs.findOne({ _id: req.body.nftId }, async (err, NFT) => {
+						if (NFT) {
+							res.json({ success: "true", info: info, nft: NFT });
+						}
+					});
+				}
+			}
+		);
+	});
+
 
 
     app.post("/NFT/updateBlocks", async (req, res) => {
