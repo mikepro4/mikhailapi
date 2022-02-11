@@ -242,6 +242,7 @@ module.exports = app => {
 			{
 				$set: { 
                     "metadata.owner": req.body.owner,
+                    "metadata.tokenId": req.body.tokenId,
                 }
 			},
 			async (err, info) => {
