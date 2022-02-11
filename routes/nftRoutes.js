@@ -378,7 +378,7 @@ const buildQuery = (criteria, user) => {
 
         _.assign(query, {
             "metadata.owner": {
-				$eq: ""
+				$eq: "0x0000000000000000000000000000000000000000"
 			}
 		});
 	}
