@@ -1,6 +1,7 @@
 const _ = require("lodash");
 const mongoose = require("mongoose");
 const NFTs = mongoose.model("NFT");
+const Shapes = mongoose.model("shape");
 const request = require('request-promise');
 const passport = require('passport');
 const requireLogin = require("../middleware/requireLogin");
@@ -309,6 +310,27 @@ module.exports = app => {
 			}
 		});
     });
+
+    // ===========================================================================
+    
+
+	app.post("/NFT/load",  async (req, res) => {
+		NFTs.findOne({ _id: req.body.NFTid }, async (err, NFT) => {
+			if (NFT) {
+
+                Shapes.findOne({ _id: NFT.metadata.shapeId }, async (err, Shape) => {
+                    if (Shape) {
+
+                        res.json({
+                            nft: NFT,
+                            shape: Shape
+                        });
+                    }
+                });
+			}
+		});
+    });
+    
     
     // ===========================================================================
 
