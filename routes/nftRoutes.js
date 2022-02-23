@@ -10,6 +10,26 @@ const requireAuth = passport.authenticate('jwt', { session: false });
 
 module.exports = app => {
 
+    // ===========================================================================
+
+	app.post("/NFTs/getMultiple", async (req, res) => {
+
+        NFTs.find(
+            {
+                _id: {
+                    $in: req.body.nfts
+                }
+            },
+            async (err, results) => {
+                if (err) res.status(400).send({ error: "true", error: err });
+                if (results) {
+                    res.json({ success: "true", results: results});
+                }
+            }
+        );
+
+	});
+
 	// ===========================================================================
 
 	app.post("/NFTs/search", async (req, res) => {
