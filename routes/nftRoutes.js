@@ -20,10 +20,34 @@ module.exports = app => {
                     $in: req.body.nfts
                 }
             },
-            async (err, results) => {
+            async (err, nfts) => {
+                
                 if (err) res.status(400).send({ error: "true", error: err });
-                if (results) {
-                    res.json({ success: "true", results: results});
+
+               
+                if (nfts) {
+
+                    let shapeIds = _.map(nfts, (nft) => {
+                        return(nft.metadata.shapeId)
+                    })
+
+                    Shapes.find(
+                        {
+                            _id: {
+                                $in: shapeIds
+                            }
+                        },
+                        async (err, shapes) => {
+                            
+                            if (err) res.status(400).send({ error: "true", error: err });
+                           
+                            if (shapes) {
+            
+                                res.json({ success: "true", nfts: nfts, shapes: shapes});
+                            }
+                        }
+                    );
+                    // res.json({ success: "true", resnftsults: results});
                 }
             }
         );
