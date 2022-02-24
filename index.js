@@ -60,6 +60,7 @@ require("./routes/main")(app);
 require("./routes/shapeRoutes")(app);
 require("./routes/wordRoutes")(app);
 require("./routes/nftRoutes")(app);
+require("./routes/youtubeRoutes")(app);
 
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT);
