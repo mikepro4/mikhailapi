@@ -63,6 +63,7 @@ require("./routes/wordRoutes")(app);
 require("./routes/nftRoutes")(app);
 require("./routes/youtubeRoutes")(app);
 require("./routes/collectionRoutes")(app);
+require("./routes/generate")(app);
 
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT);
