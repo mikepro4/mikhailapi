@@ -34,9 +34,3 @@ Animal: ${capitalizedAnimal}
 Names:`;
     }
 };
-
-const buildQuery = criteria => {
-    const query = {};
-
-    return query
-};
