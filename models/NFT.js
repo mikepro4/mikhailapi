@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { stringify } = require("qs");
 const { Schema } = mongoose;
 
 const NFTSchema = new Schema({
@@ -19,7 +20,15 @@ const NFTSchema = new Schema({
         featuredOrder: { type: Number, default: 0},
         tokenId: String,
         approved: Boolean,
-        rejected: Boolean
+        rejected: Boolean,
+        generated: { type: Boolean, default: false },
+        collectionId: String,
+        tokenId: String,
+        pinata: {
+            png: { type: Boolean, default: false },
+            svg: { type: Boolean, default: false },
+            html: { type: Boolean, default: false }
+        }
     },
 });
 

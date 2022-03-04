@@ -303,6 +303,29 @@ module.exports = app => {
 		);
 	});
 
+    app.post("/NFT/updateCollection", async (req, res) => {
+        NFTs.updateOne(
+            {
+                _id: req.body.nftId
+            },
+            {
+                $set: { 
+                    "metadata.collectionId": req.body.collectionId,
+                }
+            },
+            async (err, info) => {
+                if (err) res.status(400).send({ error: "true", error: err });
+                if (info) {
+                    NFTs.findOne({ _id: req.body.nftId }, async (err, NFT) => {
+                        if (NFT) {
+                            res.json({ success: "true", info: info, nft: NFT });
+                        }
+                    });
+                }
+            }
+        );
+    
+	});
 
 
     app.post("/NFT/updateBlocks", async (req, res) => {
@@ -517,6 +540,14 @@ const buildQuery = (criteria, user) => {
 			}
 		});
     }
+
+    if (criteria.collectionId) {
+		_.assign(query, {
+			"metadata.collectionId": {
+				$eq: criteria.collectionId
+			}
+		});
+	}
 
 	return query
 };

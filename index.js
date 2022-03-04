@@ -55,12 +55,14 @@ app.post('/signup', Authentication.signup);
 require("./models/Shape");
 require("./models/Word");
 require("./models/NFT");
+require("./models/Collection");
 
 require("./routes/main")(app);
 require("./routes/shapeRoutes")(app);
 require("./routes/wordRoutes")(app);
 require("./routes/nftRoutes")(app);
 require("./routes/youtubeRoutes")(app);
+require("./routes/collectionRoutes")(app);
 
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT);
