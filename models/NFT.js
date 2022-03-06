@@ -28,7 +28,8 @@ const NFTSchema = new Schema({
             png: { type: Boolean, default: false },
             svg: { type: Boolean, default: false },
             html: { type: Boolean, default: false }
-        }
+        },
+        prompt: String
     },
 });
 
