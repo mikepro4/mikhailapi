@@ -6,6 +6,30 @@ const request = require('request-promise');
 
 module.exports = app => {
 
+    app.post("/collection/getStats", async (req, res) => {
+
+		const approved = NFTs.find({ 
+            "metadata.collectionId": req.body.collectionId,
+            "metadata.approved": true
+        }).countDocuments()
+
+        const all = NFTs.find({ 
+            "metadata.collectionId": req.body.collectionId,
+        }).countDocuments()
+
+
+		return Promise.all(
+			[approved, all]
+		).then(
+			results => {
+				return res.json({
+					approved: results[0],
+					all: results[1]
+				});
+			}
+		);
+	});
+
 	// ===========================================================================
 
 	app.post("/collections/search", async (req, res) => {
