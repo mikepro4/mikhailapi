@@ -149,7 +149,14 @@ module.exports = app => {
 const buildQuery = criteria => {
 	const query = {};
 
- 
+    if (criteria.collectionTitle) {
+		_.assign(query, {
+			"metadata.title": {
+				$regex: criteria.collectionTitle,
+				$options: "i"
+			}
+		});
+	}
 
 	return query
 };
