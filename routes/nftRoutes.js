@@ -543,7 +543,7 @@ const buildQuery = (criteria, user) => {
 
     if (criteria.collectionId) {
 		_.assign(query, {
-			"metadata.collectionId": {
+			"metadata.collection.value": {
 				$eq: criteria.collectionId
 			}
 		});

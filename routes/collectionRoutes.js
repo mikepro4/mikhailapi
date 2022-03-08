@@ -9,12 +9,12 @@ module.exports = app => {
     app.post("/collection/getStats", async (req, res) => {
 
 		const approved = NFTs.find({ 
-            "metadata.collectionId": req.body.collectionId,
+            "metadata.collection.value": req.body.collectionId,
             "metadata.approved": true
         }).countDocuments()
 
         const all = NFTs.find({ 
-            "metadata.collectionId": req.body.collectionId,
+            "metadata.collection.value": req.body.collectionId,
         }).countDocuments()
 
 
@@ -78,6 +78,23 @@ module.exports = app => {
                 }
 			},
 			async (err, info) => {
+
+                NFTs.updateMany(
+                    {
+                        "metadata.collection.value": req.body.collectionId
+                    },
+                    {
+                        $set: {
+                            "metadata.collection.label": req.body.metadata.title,
+                        }
+                    },
+                    async (err, info) => {
+                        if (err) res.status(400).send({ error: "true", error: err });
+                        if (info) {
+                          console.log(info)
+                        }
+                    }
+                );
 				if (err) res.status(400).send({ error: "true", error: err });
 				if (info) {
 					Collections.findOne({ _id: req.body.collectionId }, async (err, Collection) => {
@@ -98,11 +115,12 @@ module.exports = app => {
 
             NFTs.updateMany(
                 {
-                    "metadata.collectionId": req.body.collectionId
+                    "metadata.collection.value": req.body.collectionId
                 },
                 {
                     $set: {
-                        "metadata.collectionId": "",
+                        "metadata.collection.value": "",
+                        "metadata.collection.label": "",
                     }
                 },
                 async (err, info) => {

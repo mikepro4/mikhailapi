@@ -23,6 +23,10 @@ const NFTSchema = new Schema({
         rejected: Boolean,
         generated: { type: Boolean, default: false },
         collectionId: String,
+        collection: {
+            value: String,
+            label: String
+        },
         tokenId: String,
         pinata: {
             png: { type: Boolean, default: false },
