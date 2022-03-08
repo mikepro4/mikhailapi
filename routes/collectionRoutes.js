@@ -149,7 +149,7 @@ module.exports = app => {
 const buildQuery = criteria => {
 	const query = {};
 
-    if (criteria.collectionTitle) {
+    if (criteria && criteria.collectionTitle) {
 		_.assign(query, {
 			"metadata.title": {
 				$regex: criteria.collectionTitle,

@@ -503,15 +503,21 @@ const buildQuery = (criteria, user) => {
 		});
 	}
 
-    if (criteria.approved) {
-		_.assign(query, {
-			"metadata.approved": {
-				$eq: true
-			},
-            "metadata.minted": {
-                $eq: false
-            }
-		});
+    if (criteria.approved !== undefined) {
+        if(criteria.approved && criteria.approved !== "false") {
+            _.assign(query, {
+                "metadata.approved": {
+                    $eq: true
+                }
+            });  
+        } else {
+            _.assign(query, {
+                "metadata.approved": {
+                    $ne: true
+                }
+            });
+        }
+		
 	}
 
     if (criteria.rejected) {
