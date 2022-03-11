@@ -39,7 +39,6 @@ module.exports = app => {
 	// ===========================================================================
 
 	app.post("/generator/update", async (req, res) => {
-        console.log(req.body.metadata)
 		Generators.updateOne(
 			{
 				_id: req.body._id
@@ -64,7 +63,7 @@ module.exports = app => {
 	// ===========================================================================
 
 	app.post("/generators/delete", async (req, res) => {
-		Generators.remove({ _id: req.body._id }, async (err) => {
+		Generators.remove({ _id: req.body.generatorId }, async (err, info) => {
             if (err) res.status(400).send({ error: "true", error: err });
             if (info) {
                 res.json({ success: "true", info: info });
