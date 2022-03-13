@@ -59,12 +59,12 @@ module.exports = app => {
 	app.post("/NFTs/search", async (req, res) => {
         console.log(req.body.user)
 		const { criteria, sortProperty, offset, limit, order, user } = req.body;
-		let adjustSortProperty 
-		if (sortProperty == "createdAt") {
-			adjustSortProperty = "metadata." + sortProperty
-		} else {
-			adjustSortProperty = "metadata." + sortProperty
-		}
+		let adjustSortProperty  = "metadata." + sortProperty
+		// if (sortProperty == "createdAt") {
+		// 	adjustSortProperty = "metadata." + sortProperty
+		// } else {
+		// 	adjustSortProperty = "metadata." + sortProperty
+		// }
 		const query = NFTs.find(buildQuery(criteria, user))
 			.sort({ [adjustSortProperty]: order })
 			.skip(offset)
@@ -539,13 +539,13 @@ const buildQuery = (criteria, user) => {
 		});
 	}
 
-    if(!user) {
-        _.assign(query, {
-			"metadata.minted": {
-				$eq: true
-			}
-		});
-    }
+    // if(!user) {
+    //     _.assign(query, {
+	// 		"metadata.minted": {
+	// 			$eq: true
+	// 		}
+	// 	});
+    // }
 
     if (criteria.collectionId) {
 		_.assign(query, {

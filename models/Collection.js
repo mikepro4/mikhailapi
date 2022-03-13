@@ -6,7 +6,8 @@ const collectionSchema = new Schema({
         title: String,
         createdAt: { type: Date, default: Date.now },
         contractAddress: String,
-        status: { type: String, default: "draft"}
+        status: { type: String, default: "draft"},
+        generatorId: String
     },
 });
 
