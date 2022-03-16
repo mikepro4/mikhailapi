@@ -1,6 +1,7 @@
 const _ = require("lodash");
 const mongoose = require("mongoose");
 const Shapes = mongoose.model("shape");
+const NFTs = mongoose.model("NFT");
 const request = require('request-promise');
 
 module.exports = app => {
@@ -48,7 +49,8 @@ module.exports = app => {
 	// ===========================================================================
 
 	app.post("/shape/update", async (req, res) => {
-		Shapes.update(
+        console.log("nftId: ", req.body.nftId)
+		Shapes.updateOne(
 			{
 				_id: req.body.shapeId
 			},
@@ -64,7 +66,18 @@ module.exports = app => {
 				if (info) {
 					Shapes.findOne({ _id: req.body.shapeId }, async (err, Shape) => {
 						if (Shape) {
-							res.json({ success: "true", info: info, Shape: Shape });
+                            NFTs.updateOne({
+                                _id: req.body.nftId
+                            },
+                            {
+                                $set: { 
+                                    "metadata.defaultViz": req.body.defaultViz,
+                                }
+                            }, async (err, Nft) => {
+                                if(Nft) {
+                                    res.json({ success: "true", info: info, Shape: Shape, Nft: Nft });
+                                }
+                            })
 						}
 					});
 				}

@@ -97,6 +97,57 @@ module.exports = app => {
 
 	// ===========================================================================
 
+    app.post("/NFTs/updateAllNfts", async (req, res) => {
+        // if(req.user.admin == true) {
+            // NFTs.find(
+            //     {
+            //     },
+            // ).forEach(async (myDoc) => { 
+            //     if(myDoc) {
+            //         print( "user: " + myDoc.nft.name ); 
+            //     }
+            // } );;
+
+            let nftList = await NFTs.find()
+
+            nftList.forEach(nft =>{
+
+                Shapes.findOne({ _id: nft.metadata.shapeId}, async (err, shape) => {
+                    if (shape) {
+                        console.log(shape)
+
+                        NFTs.updateOne(
+                            {
+                                _id: nft._id
+                            },
+                            {
+                                $set: { 
+                                    "metadata.defaultViz": shape.defaultViz
+                                }
+                            },
+                            async (err, info) => {
+                                if (err) res.status(400).send({ error: "true", error: err });
+                                if (info) {
+                                    // NFTs.findOne({ _id: req.body.nftId }, async (err, NFT) => {
+                                    //     if (NFT) {
+                                    //         res.json({ success: "true", info: info, nft: NFT });
+                                    //     }
+                                    // });
+                                }
+                            }
+                        );
+                    }
+
+                });
+            });
+        // } else {
+        //     return res.status(401).send({ error: "true", error: err })
+        // }
+		
+	});
+
+    // ===========================================================================
+
 	app.post("/NFT/update", async (req, res) => {
         // if(req.user.admin == true) {
             NFTs.updateOne(

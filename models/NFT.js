@@ -11,6 +11,7 @@ const NFTSchema = new Schema({
     },
     metadata: {
         shapeId: String,
+        defaultViz: Object,
         owner: { type: String, default: "0x0000000000000000000000000000000000000000" },
         minted: { type: Boolean, default: false },
         audioUrl: String,
