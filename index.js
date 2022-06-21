@@ -70,7 +70,7 @@ require("./routes/transcriptRoutes")(app);
 require("./routes/generatorRoutes")(app);
 
 const PORT = process.env.PORT || 5000;
-const server = app.listen(PORT);
+const server = app.listen(PORT, '0.0.0.0');
 
 const io = require('socket.io')(server, {
 	cors: {

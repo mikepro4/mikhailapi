@@ -4,11 +4,10 @@ const requireAuth = passport.authenticate('jwt', { session: false });
 
 const mongoose = require("mongoose");
 
-const Avatar = require('avatar-builder');
+
 const cloudinary = require('cloudinary').v2;
 let streamifier = require('streamifier');
 
-const avatar = Avatar.githubBuilder(128);
 const { v4: uuidv4 } = require('uuid');
 
 const NFTs = mongoose.model("NFT");
